@@ -1,0 +1,82 @@
+﻿@model SafetyRequests.ViewModels.RequestsViewModel
+
+@{ ViewData["Title"] = "Requests Form"; }
+
+<h2>@(Model.Id != Guid.Empty ? "Edit" : "Create") Request</h2>
+
+<hr />
+
+<section class="row justify-content-between">
+    <div class="col-md-4">
+        <form method="POST" asp-action="@(Model.Id != Guid.Empty ? "Edit" : "Create")" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label class="text-muted" asp-for="EmployeeName"></label>
+                <input type="text" class="form-control" asp-for="EmployeeName" maxlength="250" />
+                <span asp-validation-for="EmployeeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="text-muted" asp-for="DepartmentId"></label>
+                <select class="form-control" asp-for="DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "DepartmentName"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="text-muted" asp-for="EmployeeRoleId"></label>
+                <select class="form-control" asp-for="EmployeeRoleId" asp-items="@(new SelectList(Model.EmployeeRoles, "Id", "RoleNqme"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="EmployeeRoleId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group w-50">
+                <label class="text-muted" asp-for="WorkingStartDate"></label>
+                <input type="date" class="form-control" asp-for="WorkingStartDate" value="@(Model.WorkingStartDate)" />
+                <span asp-validation-for="WorkingStartDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group w-50">
+                <label class="text-muted" asp-for="WorkingEndDate"></label>
+                <input type="date" class="form-control" asp-for="WorkingEndDate" value="@(Model.WorkingEndDate)" />
+                <span asp-validation-for="WorkingEndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="text-muted" asp-for="PlannedActivity"></label>
+                <input type="text" class="form-control" asp-for="PlannedActivity" maxlength="250" />
+                <span asp-validation-for="PlannedActivity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="text-muted" asp-for="Equipments"></label>
+                <textarea class="form-control" asp-for="Equipments" maxlength="2500" rows="4"></textarea>
+                <span asp-validation-for="Equipments" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">
+                <i class="bi bi-check"></i>
+                Save
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary mt-4">
+                <i class="bi bi-x"></i>
+                Cancel
+            </a>
+        </form>
+    </div>
+</section>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.WorkingStartDate').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                startDate: new Date()
+            });
+            $('.WorkingEndDate').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                startDate: new Date()
+            });
+        });
+    </script>
+}
+
+

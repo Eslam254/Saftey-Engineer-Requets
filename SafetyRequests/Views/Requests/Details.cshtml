@@ -1,0 +1,119 @@
+﻿@model SafetyRequests.Models.DB.Request
+
+@{ ViewData["Title"] = Model.EmployeeRole; }
+
+@*<div class="row justify-content-between mt-60-px">
+
+        <div class="col-md-7">
+            <div class="d-flex justify-content-between mb-3">
+                <h3>@Model.EmployeeName</h3>
+                <span class="mt-2">
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <span class="text-muted">@Model.Department.DepartmentName</span>
+                </span>
+            </div>
+            <span class="text-muted mr-3">
+                <i class="bi bi-calendar-week"></i>
+                @Model.Status
+            </span>
+            <span class="text-muted">
+                <i class="bi bi-film"></i>
+                @Model.Equipments
+            </span>
+            <p class="text-justify mt-3">@Model.PlannedActivity</p>
+        </div>
+    </div>*@
+<div class="card" style="width: 18rem;">
+    <div class="card-body text-center">
+        <h5 class="card-title">@Model.EmployeeName</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Department: @Model.Department.DepartmentName</h6>
+        <p class="card-subtitle mb-2 text-muted">Request Status: @Model.Status</p>
+        <p class="card-text text-muted">Equipments: @Model.Equipments</p>
+        <p class="card-text text-muted">Last modified Date: @Model.LastModifiedDate</p>
+        <p class="card-text text-muted">Planned Activity: @Model.PlannedActivity</p>
+        <a href="javascript:;" class="btn btn-danger js-reject" data-id="@Model.Id">
+            <i class="bi bi-trash"></i>
+            Reject
+        </a>
+        <a href="javascript:;" class="btn btn-info js-approve" data-id="@Model.Id">
+            <i class="bi bi-trash"></i>
+            Approve
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>$(document).ready(function () {
+
+            $('.js-reject').on('click', function () {
+                var btn = $(this);
+                bootbox.confirm({
+                    message: "Are you sure that you need to Reject this Request?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-outline-secondary'
+                        }
+                    },
+
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/Requests/Reject/' + btn.data('id'),
+                                success: function () {
+                                    var reqContainer = btn.parents('.col-12');
+                                    reqContainer.addClass('animate__animated animate__zoomOut');
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 1000);
+                                    toastr.success('Request Rejected');
+                                },
+                                error: function () {
+                                    toastr.error('Something went wrong!');
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+
+            $('.js-approve').on('click', function () {
+                var btn = $(this);
+                bootbox.confirm({
+                    message: "Are you sure that you need to approve this Request?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-info'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-outline-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/Requests/Approve/' + btn.data('id'),
+                                success: function () {
+                                    var reqContainer = btn.parents('.col-12');
+                                    reqContainer.addClass('animate__animated animate__zoomOut');
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 1000);
+                                    toastr.success('Request Approved');
+                                },
+                                error: function () {
+                                    toastr.error('Something went wrong!');
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });</script>
+}
